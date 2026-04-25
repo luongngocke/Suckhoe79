@@ -50,19 +50,28 @@ const DEFAULT_PROFILE: UserProfile = {
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'stats' | 'log' | 'profile'>('home');
   const [profile, setProfile] = useState<UserProfile>(() => {
-    const saved = localStorage.getItem('vitaltrack_profile');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Ensure new fields exist for backward compatibility
-      if (!parsed.notifications) parsed.notifications = DEFAULT_PROFILE.notifications;
-      if (!parsed.contacts) parsed.contacts = [];
-      return parsed;
+    try {
+      const saved = localStorage.getItem('vitaltrack_profile');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Ensure new fields exist for backward compatibility
+        if (!parsed.notifications) parsed.notifications = DEFAULT_PROFILE.notifications;
+        if (!parsed.contacts) parsed.contacts = [];
+        return parsed;
+      }
+    } catch (e) {
+      console.error("Error loading profile from localStorage:", e);
     }
     return DEFAULT_PROFILE;
   });
   const [logs, setLogs] = useState<HealthLog[]>(() => {
-    const saved = localStorage.getItem('vitaltrack_logs');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('vitaltrack_logs');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      console.error("Error loading logs from localStorage:", e);
+      return [];
+    }
   });
 
   useEffect(() => {

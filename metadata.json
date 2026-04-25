@@ -1,0 +1,6 @@
+{
+  "name": "VitalTrack",
+  "description": "Ứng dụng theo dõi sức khỏe cá nhân thông minh với phân tích từ AI, giúp bạn quản lý cân nặng, lượng nước, giấc ngủ và hoạt động hàng ngày.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": []
+}

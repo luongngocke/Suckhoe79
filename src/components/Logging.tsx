@@ -31,12 +31,18 @@ export default function Logging({ addLog, profile }: LoggingProps) {
   ];
 
   const handleManualAdd = () => {
-    if (!selectedType || !value) return;
+    if (!selectedType || !value || isNaN(parseFloat(value))) {
+      if ("vibrate" in navigator) navigator.vibrate([100, 50, 100]);
+      return;
+    }
+    
     addLog({
       type: selectedType,
       value: parseFloat(value),
       unit: types.find(t => t.id === selectedType)?.unit || ''
     });
+
+    if ("vibrate" in navigator) navigator.vibrate(50);
 
     // Call suggestion for water
     if (selectedType === 'water' && profile.contacts && profile.contacts.length > 0) {
@@ -50,7 +56,10 @@ export default function Logging({ addLog, profile }: LoggingProps) {
   };
 
   const handleAIFood = async () => {
-    if (!mealInput) return;
+    if (!mealInput) {
+      if ("vibrate" in navigator) navigator.vibrate([100, 50, 100]);
+      return;
+    }
     setLoading(true);
     const result = await estimateFoodCalories(mealInput);
     addLog({
@@ -60,6 +69,7 @@ export default function Logging({ addLog, profile }: LoggingProps) {
       note: mealInput,
       metadata: { breakdown: result.breakdown }
     });
+    if ("vibrate" in navigator) navigator.vibrate(50);
     setLoading(false);
     setMealInput('');
     setSelectedType(null);
